@@ -114,20 +114,19 @@ function updateMovelist() {
 
         let currentMoves = history.slice(0, i + 1)
         let currentMove = history[i]
-        let currentFen = movesToFen(currentMoves)
 
         let moveElement = document.createElement('span')
         moveElement.innerHTML = currentMove + ' '
-        moveElement.setAttribute('data-fen', currentFen)
         moveElement.setAttribute('data-pgn', listToPgn(currentMoves))
 
         moveElement.addEventListener('click', function() {
-            board.position(currentFen)
             game = new Chess()
 
             for (let j = 0; j < currentMoves.length; j++) {
                 game.move(currentMoves[j])
             }
+
+            board.position(game.fen())
 
             updatePgn()
         })
