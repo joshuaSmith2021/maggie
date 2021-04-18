@@ -94,8 +94,50 @@ function getCorrectMoves() {
     return moves;
 }
 
+function movesToFen(moves) {
+    let tempGame = new Chess()
+    for (let i = 0; i < moves.length; i++) {
+        tempGame.move(moves[i])
+    }
+
+    return tempGame.fen()
+}
+
+function updateMovelist() {
+    $('#moves').text('')
+
+    let history = game.history()
+    for (let i = 0; i < history.length; i++) {
+        if (i % 2 === 0) {
+            $('#moves').append(`${i / 2 + 1}. `)
+        }
+
+        let currentMoves = history.slice(0, i + 1)
+        let currentMove = history[i]
+        let currentFen = movesToFen(currentMoves)
+
+        let moveElement = document.createElement('span')
+        moveElement.innerHTML = currentMove + ' '
+        moveElement.setAttribute('data-fen', currentFen)
+        moveElement.setAttribute('data-pgn', listToPgn(currentMoves))
+
+        moveElement.addEventListener('click', function() {
+            board.position(currentFen)
+            game = new Chess()
+
+            for (let j = 0; j < currentMoves.length; j++) {
+                game.move(currentMoves[j])
+            }
+
+            updatePgn()
+        })
+
+        $('#moves').append(moveElement)
+    }
+}
+
 function updatePgn() {
-    $('#moves').text(listToPgn(game.history()))
+    updateMovelist()
 
     let moveList = getCorrectMoves().join(', ')
     if (moveList === '') {
@@ -155,8 +197,10 @@ function onDrop (source, target) {
 
     // see if the move is in a line
     if (
-        correctMoves.indexOf(move.san) === -1 &&
-        !correctMoves.length === 0 &&
+        (
+            correctMoves.indexOf(move.san) === -1 ||
+            !correctMoves.length === 0
+        ) &&
         $('#forceOpenings').is(':checked')
     ) {
         takeback()
