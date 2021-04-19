@@ -13,6 +13,10 @@ for opening in openings:
 
     for line in lines[1:]:
         variation, pgn = [x.value for x in line]
+
+        if variation is None:
+            continue
+
         if variation not in result[opening].keys():
             result[opening][variation] = [pgn]
         else:
