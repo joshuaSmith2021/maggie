@@ -1,15 +1,22 @@
 import json
+from uuid import uuid4
 
 from openpyxl import load_workbook
 
 wb = load_workbook(filename='Openings.xlsx')
 openings = [x for x in wb.sheetnames if x != 'Template']
 
-result = []
+result = {x: {} for x in openings}
 
 for opening in openings:
     lines = list(wb[opening].rows)
-    result += [x[1].value for x in lines[1:]]
+
+    for line in lines[1:]:
+        variation, pgn = [x.value for x in line]
+        if variation not in result[opening].keys():
+            result[opening][variation] = [pgn]
+        else:
+            result[opening][variation].append(pgn)
 
 with open('Openings.json', 'w') as f:
     f.write(json.dumps(result))
