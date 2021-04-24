@@ -27,6 +27,6 @@ with open('Openings.json', 'w') as f:
     f.write(json.dumps(result))
 
 
-current_html = open('index.html').read()
-with open(current_html, 'w') as f:
-    f.write(re.sub('const openings = .*?\n', f'const openings = {json.dumps(result)}\n'))
+# current_html = open('index.html').read()
+# with open(current_html, 'w') as f:
+#     f.write(re.sub('const openings = .*?\n', f'const openings = {json.dumps(result)}\n'))
