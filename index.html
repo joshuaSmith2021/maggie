@@ -31,6 +31,7 @@
             <div class="col-md-6">
                 <div id="myBoard" style="height:400px"></div>
                 <p id="moveText" style="text-align:center;"></p>
+                <p id="fenText" style="text-align:center;"></p>
             </div>
             <div class="col-md-3">
                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="d4, e4" id="moveTooltip">Possible Moves</a>
@@ -104,6 +105,7 @@ function movesToFen(moves) {
 function updateMovelist() {
     $('#moves').html('')
     $('#moveText').text(listToPgn(game.history()))
+    $('#fenText').text(game.fen())
 
     let history = game.history()
     for (let i = 0; i < history.length; i++) {
